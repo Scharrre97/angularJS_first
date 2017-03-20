@@ -21,7 +21,11 @@
 
     demoApp.controller("mainController", function($scope, userService) {
         $scope.users = userService.users();
-
+        $scope.newUser = {};
+        $scope.addUser = function(){
+            userService.add($scope.newUser);
+            $scope.newUser = {};
+        }
     });
 
     demoApp.service('userService', function(){
@@ -35,6 +39,9 @@
         return {
             users: function(){
                 return collection;
+            },
+            add: function(object){
+                collection.push(object);
             }
         }
     });
