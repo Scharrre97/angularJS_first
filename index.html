@@ -6,23 +6,41 @@
 </head>
 <body>
 <div ng-app="demoApp" ng-controller="mainController">
-    <say-hello message="Hi"></say-hello>
+    <div ng-repeat="user in users">
+        <say-hello message="Hi"></say-hello>
+    </div>
 </div>
 
 <script>
     var demoApp = angular.module("demoApp", []);
 
-    demoApp.controller("mainController", function($scope) {
-        $scope.firstName = "Johan";
-        $scope.lastName = "Schantz";
+    demoApp.controller("mainController", function($scope, userService) {
+        $scope.users = userService.users();
+
     });
+
+    demoApp.service('userService', function(){
+        var collection = [
+            {firstName: 'Johan', lastName: 'Schantz'},
+            {firstName: 'Fabian', lastName: 'Lundgren'},
+            {firstName: 'Felix', lastName: 'Ottander'},
+            {firstName: 'Casper', lastName: 'Jureskog'},
+            {firstName: 'Jennifer', lastName: 'Coloma'}
+        ];
+        return {
+            users: function(){
+                return collection;
+            }
+        }
+    });
+
     demoApp.directive("sayHello", function() {
         return {
             scope: false,
             link: function($scope, element, attrs){
                 $scope.message = attrs.message;
             },
-            template: "<h1> {{[message, firstName, lastName].join(' ')}}!</h1>"
+            template: "<h1> {{[message, user.firstName, user.lastName].join(' ')}}!</h1>"
         };
     });
 </script>
